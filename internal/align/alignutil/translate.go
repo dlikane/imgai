@@ -1,4 +1,4 @@
-package imgalign
+package alignutil
 
 import (
 	"gocv.io/x/gocv"

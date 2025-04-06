@@ -1,0 +1,33 @@
+Let's make make align nicer. Let's add ci arguments with cobra, move logic to internal. Please suggest how to have it deployed and run, we need py script installation and we need models at run time as resources.
+Default we will be running locally with images coming from data/input, with one of the images picked up as a base, pass only it's name in command line.
+I will need to resize images to -m 1000x1500 default, we need to fill the size, cropping extra. Than we align images.
+Also we will be creating video from images, with setting similar to ffmpeg's -framerate 50 -c:v libx264 -pix_fmt yuv420p (we are not using ffmpeg, but we need to have similar settings).
+We will be saving video to data/output.
+Please outline how you would approach this task, what would you use, how would you structure the code. And we will go step by step from there.
+Here is my full code:
+
+
+📷 Aligning  13% |██                  | (56/403, 1 it/s) [41s:4m11s]debug:
+Resolved script path: /Users/dlikane/dev/home/imgai/scripts/landmark_extractor.py
+debug: Image: data/input/2024_nick_0001_small.jpg
+debug: Left eye: [473 224], Right eye: [600 223]
+debug: Scale : base=98.67, target=127.00, result=0.7769
+debug: MoveX : base=358, target=473, dx=-115.00
+debug: MoveY : base=228, target=224, dy=4.00
+SIGSEGV: segmentation violation
+PC=0x19209225c m=0 sigcode=2 addr=0x3b2e98000
+signal arrived during cgo execution
+
+
+📷 Aligning  20% |████                | (84/402, 1 it/s) [1m0s:3m57s]debug:
+Resolved script path: /Users/dlikane/dev/home/imgai/scripts/landmark_extractor.py
+debug: Image: data/input/2024_varia_0007_portrait_fav_small.jpg
+debug: Left eye: [324 273], Right eye: [366 272]
+debug: Scale : base=98.67, target=42.01, result=2.3486
+debug: MoveX : base=358, target=324, dx=34.00
+debug: MoveY : base=228, target=273, dy=-45.00
+libc++abi: terminating due to uncaught exception of type cv::Exception: OpenCV(4.11.0) /tmp/opencv-20250110-25765-4fdaof/opencv-4.11.0/modules/core/src/matrix.cpp:807: error: (-215:Assertion failed) 0 <= roi.x && 0 <= roi.width && roi.x + roi.width <= m.cols && 0 <= roi.y && 0 <= roi.height && roi.y + roi.height <= m.rows in function 'Mat'
+
+SIGABRT: abort
+PC=0x1920295f0 m=0 sigcode=0
+signal arrived during cgo execution

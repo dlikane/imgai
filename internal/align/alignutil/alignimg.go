@@ -1,14 +1,16 @@
-package imgalign
+package alignutil
 
 import (
 	"gocv.io/x/gocv"
 	"image"
-	"log"
+	"imgai/pkg/common"
 	"math"
 )
 
 // AlignImage applies rotation, scaling, and translation to align the target image.
 func AlignImage(targetEyes [2]image.Point, img gocv.Mat, angle, scale, dx, dy float64) gocv.Mat {
+	log := common.GetLogger()
+
 	// Get the original size of the canvas
 	canvasSize := img.Size()
 	canvasWidth := canvasSize[1]
@@ -42,8 +44,13 @@ func AlignImage(targetEyes [2]image.Point, img gocv.Mat, angle, scale, dx, dy fl
 	roiHeight := min(newHeight, canvasHeight-roiY)
 
 	// Ensure ROI dimensions are valid
-	if roiWidth <= 0 || roiHeight <= 0 {
-		log.Println("Scaled image does not fit into the canvas.")
+	// Ensure ROI dimensions are valid and within bounds
+	if roiWidth <= 0 || roiHeight <= 0 ||
+		roiX < 0 || roiY < 0 ||
+		roiX+roiWidth > canvasWidth ||
+		roiY+roiHeight > canvasHeight {
+		log.Warnf("⚠️ Invalid ROI for image. roi=(%d,%d,%d,%d), canvas=(%d,%d)",
+			roiX, roiY, roiX+roiWidth, roiY+roiHeight, canvasWidth, canvasHeight)
 		return canvas
 	}
 
